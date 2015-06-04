@@ -5,8 +5,7 @@ feature 'User signs up' do
     expect(User.first.email).to eq('alice@example.com')
   end
 
-  def sign_up(email = 'alice@example.com',
-              password = 'oranges!')
+  def sign_up(email: 'alice@example.com', password: 'oranges!')
     visit '/users/new'
     expect(page.status_code).to eq(200)
     fill_in :email, with: email
