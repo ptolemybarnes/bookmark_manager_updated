@@ -1,4 +1,5 @@
 feature 'User adds a link' do
+
   scenario 'using the new links form' do
     visit '/links/new'
     fill_in 'url', with: 'http://www.zombo.com'
