@@ -3,14 +3,15 @@ require 'bcrypt'
 class User
   include DataMapper::Resource
 
+  attr_reader :password
+  attr_accessor :password_confirmation
+
   property :id, Serial
   property :email, String
   property :password_digest, Text
 
   validates_confirmation_of :password
-
-  attr_reader :password
-  attr_accessor :password_confirmation # NOTE: Never create an accessor with the same name as a DataMapper property
+  property :email, String, unique: true, message: 'This email is already taken'
 
   def password=(password)
     @password = password
