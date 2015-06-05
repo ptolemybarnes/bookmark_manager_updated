@@ -23,3 +23,35 @@ feature 'User signs up' do
   end
 
 end
+
+feature 'User signs in' do
+
+  let(:user) { User.create(attributes_for_user) }
+
+  scenario 'with correct credentials' do
+    visit '/user/new'
+    sign_in_as(user)
+    expect(page).to have_content("Welcome, #{user.email}")
+  end
+
+  scenario 'with incorrect credentials' do
+    user = User.new(attributes_for_user(password: 'typo1234'))
+    visit '/user/new'
+    sign_in_as(user)
+    expect(page).not_to have_content("Welcome, #{user.email}")
+  end
+
+  def sign_in_as(user)
+    visit '/sessions/new'
+    fill_in 'email', with: email
+    fill_in 'password', with: password
+    click_button 'Sign in'
+  end
+
+  def attributes_for_user(email: 'test@test.com', password: 'secret1234',
+                          password_confirmation: 'secret1234')
+    { email: email, password: password, password_confirmation: password_confirmation }
+  end
+
+end  
+
