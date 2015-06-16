@@ -49,6 +49,15 @@ class BookmarkManager < Sinatra::Base
       erb :'users/new'
     end
   end
+
+  get '/users/password_reset/:password_token' do
+    if user = User.first(password_token: params[:password_token])
+      session[:password_token] = params[:password_token]
+      erb :'password/new'
+    else
+      redirect to '/links'
+    end
+  end
   
   get '/sessions/new' do
     erb :'sessions/new'
@@ -69,6 +78,17 @@ class BookmarkManager < Sinatra::Base
     flash[:notice] = 'Goodbye!'
     session[:user_id] = nil
     redirect to('/links')
+  end
+
+  get '/password_reset' do
+    erb :password_reset
+  end
+
+  post '/password_reset' do
+    user = User.first(email: params[:email])
+    user.password_token = (1..64).map { ('A'..'Z').to_a.sample }.join
+    user.save
+    redirect to '/sessions/new'
   end
 
   helpers do
