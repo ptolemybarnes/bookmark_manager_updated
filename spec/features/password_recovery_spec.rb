@@ -19,6 +19,7 @@ feature 'Password reset' do
   scenario 'resetting password' do
     user = User.first
     user.password_token = 'token'
+    user.save
 
     visit "/users/password_reset/#{user.password_token}" 
 
